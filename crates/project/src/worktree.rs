@@ -3220,10 +3220,7 @@ impl BackgroundScanner {
         }
     }
 
-    async fn run(
-        &mut self,
-        mut fs_events_rx: Pin<Box<dyn Send + Stream<Item = Vec<fs::Event>>>>,
-    ) {
+    async fn run(&mut self, mut fs_events_rx: Pin<Box<dyn Send + Stream<Item = Vec<fs::Event>>>>) {
         use futures::FutureExt as _;
 
         // Populate ignores above the root.
