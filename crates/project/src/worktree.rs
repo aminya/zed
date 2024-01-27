@@ -3222,7 +3222,7 @@ impl BackgroundScanner {
 
     async fn run(
         &mut self,
-        mut fs_events_rx: Pin<Box<dyn Send + Stream<Item = Vec<fsevent::Event>>>>,
+        mut fs_events_rx: Pin<Box<dyn Send + Stream<Item = Vec<fs::Event>>>>,
     ) {
         use futures::FutureExt as _;
 
@@ -3270,9 +3270,10 @@ impl BackgroundScanner {
         // have the previous state loaded yet.
         self.phase = BackgroundScannerPhase::EventsReceivedDuringInitialScan;
         if let Poll::Ready(Some(events)) = futures::poll!(fs_events_rx.next()) {
-            let mut paths = events.into_iter().map(|e| e.path).collect::<Vec<_>>();
+            let mut paths = fs::fs_events_paths(events);
+
             while let Poll::Ready(Some(more_events)) = futures::poll!(fs_events_rx.next()) {
-                paths.extend(more_events.into_iter().map(|e| e.path));
+                paths.extend(fs::fs_events_paths(more_events));
             }
             self.process_events(paths).await;
         }
@@ -3311,9 +3312,10 @@ impl BackgroundScanner {
 
                 events = fs_events_rx.next().fuse() => {
                     let Some(events) = events else { break };
-                    let mut paths = events.into_iter().map(|e| e.path).collect::<Vec<_>>();
+                    let mut paths = fs::fs_events_paths(events);
+
                     while let Poll::Ready(Some(more_events)) = futures::poll!(fs_events_rx.next()) {
-                        paths.extend(more_events.into_iter().map(|e| e.path));
+                        paths.extend(fs::fs_events_paths(more_events));
                     }
                     self.process_events(paths.clone()).await;
                 }
