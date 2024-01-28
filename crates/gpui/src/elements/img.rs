@@ -6,6 +6,7 @@ use crate::{
     StyleRefinement, Styled,
 };
 use futures::FutureExt;
+#[cfg(target_os = "macos")]
 use media::core_video::CVImageBuffer;
 use util::ResultExt;
 
@@ -18,6 +19,7 @@ pub enum ImageSource {
     Data(Arc<ImageData>),
     // TODO: move surface definitions into mac platform module
     /// A CoreVideo image buffer
+    #[cfg(target_os = "macos")]
     Surface(CVImageBuffer),
 }
 
@@ -45,6 +47,7 @@ impl From<Arc<ImageData>> for ImageSource {
     }
 }
 
+#[cfg(target_os = "macos")]
 impl From<CVImageBuffer> for ImageSource {
     fn from(value: CVImageBuffer) -> Self {
         Self::Surface(value)

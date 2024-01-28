@@ -29,7 +29,7 @@ log.workspace = true
 rust-embed.workspace = true
 serde.workspace = true
 settings = { path = "../settings" }
-simplelog = "0.9"
+simplelog.workspace = true
 smallvec.workspace = true
 story = { path = "../story" }
 theme = { path = "../theme" }

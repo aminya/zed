@@ -2,6 +2,8 @@ mod app_menu;
 mod keystroke;
 #[cfg(target_os = "macos")]
 mod mac;
+#[cfg(not(target_os = "macos"))]
+mod wgpu_platform;
 #[cfg(any(test, feature = "test-support"))]
 mod test;
 
@@ -35,6 +37,8 @@ pub use app_menu::*;
 pub use keystroke::*;
 #[cfg(target_os = "macos")]
 pub(crate) use mac::*;
+#[cfg(not(target_os = "macos"))]
+pub(crate) use wgpu_platform::*;
 #[cfg(any(test, feature = "test-support"))]
 pub(crate) use test::*;
 use time::UtcOffset;
@@ -42,6 +46,11 @@ use time::UtcOffset;
 #[cfg(target_os = "macos")]
 pub(crate) fn current_platform() -> Rc<dyn Platform> {
     Rc::new(MacPlatform::new())
+}
+
+#[cfg(not(target_os = "macos"))]
+pub(crate) fn current_platform() -> Rc<dyn Platform> {
+    Rc::new(WgpuPlatform::new())
 }
 
 pub(crate) trait Platform: 'static {

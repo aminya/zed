@@ -21,7 +21,7 @@ pathfinder_color = "0.5"
 rust-embed.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-simplelog = "0.9"
+simplelog.workspace = true
 strum = { version = "0.25.0", features = ["derive"] }
 theme = { path = "../theme" }
 uuid.workspace = true

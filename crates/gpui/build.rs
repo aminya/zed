@@ -6,11 +6,15 @@ use std::{
 
 use cbindgen::Config;
 
+#[cfg(target_os = "macos")]
 fn main() {
     generate_dispatch_bindings();
     let header_path = generate_shader_bindings();
     compile_metal_shaders(&header_path);
 }
+
+#[cfg(not(target_os = "macos"))]
+fn main() {}
 
 fn generate_dispatch_bindings() {
     println!("cargo:rustc-link-lib=framework=System");

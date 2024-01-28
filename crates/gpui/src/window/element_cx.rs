@@ -23,6 +23,7 @@ use std::{
 use anyhow::Result;
 use collections::{FxHashMap, FxHashSet};
 use derive_more::{Deref, DerefMut};
+#[cfg(target_os = "macos")]
 use media::core_video::CVImageBuffer;
 use smallvec::SmallVec;
 use util::post_inc;
@@ -935,6 +936,7 @@ impl<'a> ElementContext<'a> {
     }
 
     /// Paint a surface into the scene for the next frame at the current z-index.
+    #[cfg(target_os = "macos")]
     pub fn paint_surface(&mut self, bounds: Bounds<Pixels>, image_buffer: CVImageBuffer) {
         let scale_factor = self.scale_factor();
         let bounds = bounds.scale(scale_factor);

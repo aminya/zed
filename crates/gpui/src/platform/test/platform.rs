@@ -117,6 +117,7 @@ impl Platform for TestPlatform {
         self.foreground_executor.clone()
     }
 
+    #[cfg(target_os = "macos")]
     fn text_system(&self) -> Arc<dyn PlatformTextSystem> {
         Arc::new(crate::platform::mac::MacTextSystem::new())
     }
